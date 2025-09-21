@@ -404,6 +404,37 @@ window.addEventListener("resize", function () {
 
   ctx.font = opts.charSize + "px Verdana";
 });
+// Your existing variable declarations and options here...
+
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+function anim() {
+  window.requestAnimationFrame(anim);
+
+  ctx.fillStyle = "#111";
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.translate(hw, hh);
+
+  var done = true;
+  for (var l = 0; l < letters.length; ++l) {
+    letters[l].step();
+    if (letters[l].phase !== "done") done = false;
+  }
+
+  ctx.translate(-hw, -hh);
+
+  if (done) {
+    if (isMobile) {
+      window.location.href = "electric-border.html";
+    } else {
+      setTimeout(() => {
+        window.location.href = "electric-border.html";
+      }, 1000);
+    }
+    return;
+  }
+}
 
 
 
