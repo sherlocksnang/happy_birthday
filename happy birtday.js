@@ -371,7 +371,7 @@ function anim() {
 
   if (done) {
   setTimeout(() => {
-    window.location.href = "electric-border.html";
+    window.location.href = "birthday_wish.html";
   }, 100); // 0.1 second delay
   return;
 };
@@ -404,5 +404,6 @@ window.addEventListener("resize", function () {
 
   ctx.font = opts.charSize + "px Verdana";
 });
+
 
 
