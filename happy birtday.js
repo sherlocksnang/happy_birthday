@@ -426,15 +426,16 @@ function anim() {
 
   if (done) {
     if (isMobile) {
-      window.location.href = "electric-border.html";
+      window.location.href = "birthday_wish.html";
     } else {
       setTimeout(() => {
-        window.location.href = "electric-border.html";
+        window.location.href = "birthday_wish.html";
       }, 1000);
     }
     return;
   }
 }
+
 
 
 
