@@ -5,7 +5,7 @@ let w = (c.width = window.innerWidth),
 (hh = h / 2),
   (opts = {
     // change the text in here //
-    strings: ["HAPPY", "BIRTHDAY!", "to You"],
+    strings: ["HAPPY", "BIRTHDAY!", "to Thae"],
     charSize: 30,
     charSpacing: 35,
     lineHeight: 40,
@@ -372,7 +372,7 @@ function anim() {
   if (done) {
   setTimeout(() => {
     window.location.href = "electric-border.html";
-  }, 1000); // 1 second delay
+  }, 100); // 0.1 second delay
   return;
 };
 }
@@ -404,3 +404,4 @@ window.addEventListener("resize", function () {
 
   ctx.font = opts.charSize + "px Verdana";
 });
+
