@@ -1,9 +1,9 @@
 let w = (c.width = window.innerWidth),
   h = (c.height = window.innerHeight),
   ctx = c.getContext("2d"),
-  hw = w / 2;
-(hh = h / 2),
-  (opts = {
+  hw = w / 2,
+  hh = h / 2,
+  opts = {
     // change the text in here //
     strings: ["HAPPY", "BIRTHDAY!", "EITHAE"],
     charSize: 30,
@@ -44,15 +44,15 @@ let w = (c.width = window.innerWidth),
     balloonAddedVel: 0.4,
     balloonBaseRadian: -(Math.PI / 2 - 0.5),
     balloonAddedRadian: -1,
-  }),
-  (calc = {
+  },
+  calc = {
     totalWidth:
       opts.charSpacing *
       Math.max(opts.strings[0].length, opts.strings[1].length),
-  }),
-  (Tau = Math.PI * 2),
-  (TauQuarter = Tau / 4),
-  (letters = []);
+  },
+  Tau = Math.PI * 2,
+  TauQuarter = Tau / 4,
+  letters = [];
 
 ctx.font = opts.charSize + "px Verdana";
 
@@ -178,7 +178,6 @@ Letter.prototype.step = function () {
       ctx.fillStyle = this.lightAlphaColor
         .replace("light", 50 + 50 * proportion)
         .replace("alp", proportion);
-      ctx.beginPath();
       ctx.arc(this.x, this.y, armonic * this.circleFinalSize, 0, Tau);
       ctx.fill();
 
@@ -297,6 +296,7 @@ Letter.prototype.step = function () {
     }
   }
 };
+
 function Shard(x, y, vx, vy, color) {
   var vel =
     opts.fireworkShardBaseVel + opts.fireworkShardAddedVel * Math.random();
@@ -340,6 +340,7 @@ Shard.prototype.step = function () {
 
   if (this.prevPoints[0][1] > hh) this.alive = false;
 };
+
 function generateBalloonPath(x, y, size) {
   ctx.moveTo(x, y);
   ctx.bezierCurveTo(
@@ -353,16 +354,22 @@ function generateBalloonPath(x, y, size) {
   ctx.bezierCurveTo(x + size / 4, y - size, x + size / 2, y - size / 2, x, y);
 }
 
-function anim() {
-  window.requestAnimationFrame(anim);
+// ✅ Fixed anim function
+let animFrame;
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
+function anim() {
+  animFrame = requestAnimationFrame(anim);
+
+  // FIX: reset transforms each frame for Safari
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = "#111";
   ctx.fillRect(0, 0, w, h);
 
   ctx.translate(hw, hh);
 
-  var done = true;
-  for (var l = 0; l < letters.length; ++l) {
+  let done = true;
+  for (let l = 0; l < letters.length; ++l) {
     letters[l].step();
     if (letters[l].phase !== "done") done = false;
   }
@@ -370,15 +377,17 @@ function anim() {
   ctx.translate(-hw, -hh);
 
   if (done) {
-  setTimeout(() => {
-    window.location.href = "birthday_wish.html";
-  }, 100); // 0.1 second delay
-  return;
-};
+    cancelAnimationFrame(animFrame); // stop loop before redirect
+
+    // ✅ Safari-safe redirect
+    setTimeout(() => {
+      window.location.replace("birthday_wish.html");
+    }, isMobile ? 300 : 1000);
+  }
 }
 
 for (let i = 0; i < opts.strings.length; ++i) {
-  for (var j = 0; j < opts.strings[i].length; ++j) {
+  for (let j = 0; j < opts.strings[i].length; ++j) {
     letters.push(
       new Letter(
         opts.strings[i][j],
@@ -404,39 +413,3 @@ window.addEventListener("resize", function () {
 
   ctx.font = opts.charSize + "px Verdana";
 });
-// Your existing variable declarations and options here...
-
-const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-function anim() {
-  window.requestAnimationFrame(anim);
-
-  ctx.fillStyle = "#111";
-  ctx.fillRect(0, 0, w, h);
-
-  ctx.translate(hw, hh);
-
-  var done = true;
-  for (var l = 0; l < letters.length; ++l) {
-    letters[l].step();
-    if (letters[l].phase !== "done") done = false;
-  }
-
-  ctx.translate(-hw, -hh);
-
-  if (done) {
-    if (isMobile) {
-      window.location.href = "birthday_wish.html";
-    } else {
-      setTimeout(() => {
-        window.location.href = "birthday_wish.html";
-      }, 1000);
-    }
-    return;
-  }
-}
-
-
-
-
-
